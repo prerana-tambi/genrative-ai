@@ -1,5 +1,9 @@
-import streamlit as st
+from dotenv import load_dotenv 
+load_dotenv() 
 
+import streamlit as st 
+import os 
+import google.generativeai as genai 
 # Correct usage of set_page_config with 'page_title' argument
 st.set_page_config(page_title='GEN AI GENERATOR', layout='wide')
 
@@ -7,16 +11,23 @@ st.set_page_config(page_title='GEN AI GENERATOR', layout='wide')
 st.title('Welcome to GEN AI GENERATOR!')
 st.write("This is a simple AI generation app.")
 
-from dotenv import load_dotenv
-load_dotenv()
+genai.configure(api_key="AIzaSyDvddt_-PvXxzygmoQkZxp0-e3zUogl21A")
 
-import streamlit as st
-import os
-import google.generativeai as genai
+# model = genai.GenerativeModel("gemini-flash-1.5") 
+model = genai.GenerativeModel("gemini-pro") 
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+def my_output(query):
+    response = model.generate_content(query) 
+    return response.text 
 
-model = genai.GenerativeModel('gemeini-flash-1.5')
+#### UI Development using streamlit 
 
-def my_output(query) -> str:
-    response = model.generate_content
+
+st.header("SMART_BOT") 
+input = st.text_input("Input " , key = "input")  
+submit = st.button("Ask your query") 
+
+if submit :
+    response = my_output(input) 
+    st.subheader("The Response is=")
+    st.write(response)
